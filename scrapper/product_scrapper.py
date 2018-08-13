@@ -10,8 +10,8 @@ class ProductDetailsScrapper(object):
     def get_html(url):
         return requests.get(url, verify=False).text
 
-    @classmethod
-    def __price_converter(cls, price_tag):
+    @staticmethod
+    def __price_converter(price_tag):
         """
         Converts product price string to float
         :param price_tag: is soup html tag which contains product price
@@ -29,33 +29,38 @@ class ProductDetailsScrapper(object):
 
         return price
 
+    @staticmethod
+    def __find_element(soup, locators):
+        for locator in locators:
+            if locator.parent:
+                parent = soup.find(name=locator.parent.tag_name, **locator.parent.attrs)
+                if parent:
+                    element = parent.find(name=locator.tag_name, **locator.attrs)
+                    if element:
+                        return parent.find(name=locator.tag_name, **locator.attrs)
+            else:
+                element = soup.find(name=locator.tag_name, **locator.attrs)
+                if element:
+                    return element
+        return None
+
     def get_product_price(self, url):
         soup = BeautifulSoup(self.get_html(url), 'html.parser')
-        for name_locator in PRODUCT_PRICE_LOCATORS:
-            parent = soup.find(name=name_locator.parent_locator.name, **name_locator.parent_locator.attrs)
-            if parent:
-                price = parent.find(name_locator.child_locator.name, **name_locator.child_locator.attrs)
-                if price:
-                    return self.__price_converter(price)
+        price = self.__find_element(soup, PRODUCT_PRICE_LOCATORS)
+        if price:
+            return self.__price_converter(price)
         return None
 
     def get_product_image(self, url):
         soup = BeautifulSoup(self.get_html(url), 'html.parser')
-        for name_locator in PRODUCT_IMAGE_LOCATORS:
-            parent = soup.find(name=name_locator.parent_locator.name, **name_locator.parent_locator.attrs)
-            if parent:
-                image = parent.find(name_locator.child_locator.name, **name_locator.child_locator.attrs)
-                if image:
-                    return image['src']
+        image_tag = self.__find_element(soup, PRODUCT_IMAGE_LOCATORS)
+        if image_tag:
+            return image_tag['src']
         return None
 
     def get_product_name(self, url):
         soup = BeautifulSoup(self.get_html(url), 'html.parser')
-        for name_locator in PRODUCT_NAME_LOCATORS:
-            parent = soup.find(name=name_locator.parent_locator.name, **name_locator.parent_locator.attrs)
-            if parent:
-                name = parent.find(name_locator.child_locator.name, **name_locator.child_locator.attrs)
-                if name:
-                    name = str(name.text).strip().split('+')[0]
-                    return name
+        name_tag = self.__find_element(soup, PRODUCT_NAME_LOCATORS)
+        if name_tag:
+            return str(name_tag.text).strip().split('+')[0]
         return None

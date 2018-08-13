@@ -1,80 +1,49 @@
-class Locator(object):
-    def __init__(self, name, key='', value=''):
-        self.name = name
-        self.attrs = {key: value}
+class By(object):
+    def __init__(self, tag_name=None, class_=None, id=None, parent=None):
+        self.tag_name = tag_name
+        self.parent = parent
+        self.__class = class_
+        self.__id = id
 
-
-class DetailedLocator(object):
-    def __init__(self, parent_locator, child_locator):
-        self.parent_locator = parent_locator
-        self.child_locator = child_locator
+    @property
+    def attrs(self):
+        if self.__class:
+            return {'class_': self.__class}
+        elif self.__id:
+            return {'id': self.__id}
+        else:
+            return {}
 
 
 PRODUCT_NAME_LOCATORS = [
     # https://bt.rozetka.com.ua
-    DetailedLocator(
-        parent_locator=Locator(name='div', key='class_', value='detail-title-wrap'),
-        child_locator=Locator(name='h1', key='class_', value='detail-title')
-    ),
+    By(tag_name='h1', class_='detail-title', parent=By(tag_name='div', class_='detail-title-wrap')),
     # https://ikea-club.com.ua
-    DetailedLocator(
-        parent_locator=Locator(name='div', key='class_', value='product-name'),
-        child_locator=Locator(name='h1')
-    ),
+    By(tag_name='h1', parent=By(tag_name='div', class_='product-name')),
     # https://e27.com.ua
-    DetailedLocator(
-        parent_locator=Locator(name='div', key='class_', value='product-name'),
-        child_locator=Locator(name='h1')
-    ),
+    By(tag_name='h1', parent=By(tag_name='div', class_='product-name')),
     # https://jysk.ua
-    DetailedLocator(
-        parent_locator=Locator(name='div', key='class_', value='product-name-sku'),
-        child_locator=Locator(name='h1')
-    )
+    By(tag_name='h1', parent=By(tag_name='div', class_='product-name-sku'))
 ]
 
 PRODUCT_IMAGE_LOCATORS = [
     # https://bt.rozetka.com.ua
-    DetailedLocator(
-        parent_locator=Locator(name='div', key='class_', value='responsive-img'),
-        child_locator=Locator(name='img', key='id', value='base_image')
-    ),
+    By(tag_name='img', id='base_image', parent=By(tag_name='div', class_='responsive-img')),
     # https://ikea-club.com.ua
-    DetailedLocator(
-        parent_locator=Locator(name='div', key='id', value='sevenspikes-cloud-zoom'),
-        child_locator=Locator(name='img', key='id', value='cloudZoomImage')
-    ),
+    By(tag_name='img', id='cloudZoomImage', parent=By(tag_name='div', id='sevenspikes-cloud-zoom')),
     # https://e27.com.ua
-    DetailedLocator(
-        parent_locator=Locator(name='div', key='class_', value='img-box'),
-        child_locator=Locator(name='img', key='id', value='image-main')
-    ),
+    By(tag_name='img', id='image-main', parent=By(tag_name='div', class_='img-box')),
     # https://jysk.ua
-    DetailedLocator(
-        parent_locator=Locator(name='div', key='id', value='product-image-carousel'),
-        child_locator=Locator(name='img', key='class_', value='image')
-    )
+    By(tag_name='img', class_='image', parent=By(tag_name='div', id='product-image-carousel'))
 ]
 
 PRODUCT_PRICE_LOCATORS = [
     # https://bt.rozetka.com.ua
-    DetailedLocator(
-        parent_locator=Locator(name='div', key='class_', value='detail-price-uah'),
-        child_locator=Locator(name='meta', key='itemprop', value='price')
-    ),
+    By(tag_name='meta', parent=By(tag_name='div', class_='detail-price-uah')),
     # https://ikea-club.com.ua
-    DetailedLocator(
-        parent_locator=Locator(name='div', key='class_', value='product-price'),
-        child_locator=Locator(name='span')
-    ),
+    By(tag_name='span', parent=By(tag_name='div', class_='product-price')),
     # https://e27.com.ua
-    DetailedLocator(
-        parent_locator=Locator(name='div', key='class_', value='product-primary-column'),
-        child_locator=Locator(name='meta', key='itemprop', value='price')
-    ),
+    By(tag_name='span', class_='price', parent=By(tag_name='div', class_='product-type-data')),
     # https://jysk.ua
-    DetailedLocator(
-        parent_locator=Locator(name='div', key='class_', value='product-sumup'),
-        child_locator=Locator(name='span', key='class_', value='product-price')
-    )
+    By(tag_name='span', class_='product-price', parent=By(tag_name='div', class_='product-sumup'))
 ]
