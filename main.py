@@ -18,17 +18,13 @@ def clear_spreadsheet():
 def update_spreadsheet():
     products_url_cells = sheet_controller.get_all_working_cells()
     for cell in products_url_cells:
-        name = scrapper.get_product_name(cell.value)
-        if name:
-            sheet_controller.update_product_name(cell, name)
-
-        image = scrapper.get_product_image(cell.value)
-        if image:
-            sheet_controller.update_product_image(cell, image)
-
-        price = scrapper.get_product_price(cell.value)
-        if price:
-            sheet_controller.update_product_price(cell, price)
+        product = scrapper.get_product_details(cell.value)
+        if product.name:
+            sheet_controller.update_product_name(cell, product.name)
+        if product.price:
+            sheet_controller.update_product_price(cell, product.price)
+        if product.image_url:
+            sheet_controller.update_product_image(cell, product.image_url)
 
 
 if __name__ == '__main__':

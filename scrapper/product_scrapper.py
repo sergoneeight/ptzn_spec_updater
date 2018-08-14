@@ -11,26 +11,7 @@ class ProductDetailsScrapper(object):
         return requests.get(url, verify=False).text
 
     @staticmethod
-    def __price_converter(price_tag):
-        """
-        Converts product price string to float
-        :param price_tag: is soup html tag which contains product price
-        :return: float product price
-        """
-        try:
-            price = price_tag['content']
-        except KeyError as e:
-            print('There is no {} key in price tag'.format(e))
-            price = price_tag.text
-
-        if price:
-            price = ''.join(i for i in price if i.isdigit() or i == ',' or i == '.')
-            price = float(price)
-
-        return price
-
-    @staticmethod
-    def __find_element(soup, locators):
+    def _find_element(soup, locators):
         for locator in locators:
             if locator.parent:
                 parent = soup.find(name=locator.parent.tag_name, **locator.parent.attrs)
@@ -44,23 +25,43 @@ class ProductDetailsScrapper(object):
                     return element
         return None
 
-    def get_product_price(self, url):
+    def get_product_details(self, url):
         soup = BeautifulSoup(self.get_html(url), 'html.parser')
-        price = self.__find_element(soup, PRODUCT_PRICE_LOCATORS)
+        name_tag = self._find_element(soup, PRODUCT_NAME_LOCATORS)
+        price_tag = self._find_element(soup, PRODUCT_PRICE_LOCATORS)
+        image_tag = self._find_element(soup, PRODUCT_IMAGE_LOCATORS)
+        return Product(name_tag, price_tag, image_tag)
+
+
+class Product(object):
+    def __init__(self, name_tag, price_tag, image_tag):
+        self._name_tag = name_tag
+        self._price_tag = price_tag
+        self._image_tag = image_tag
+
+    @property
+    def name(self):
+        name = None
+        if self._name_tag:
+            name = self._name_tag.text.strip().split('+')[0]
+        return name
+
+    @property
+    def price(self):
+        try:
+            price = self._price_tag['content']
+        except KeyError as e:
+            print('There is no {} key in price tag'.format(e))
+            price = self._price_tag.text
+
         if price:
-            return self.__price_converter(price)
-        return None
+            price = ''.join(i for i in price if i.isdigit() or i == ',' or i == '.')
+            price = float(price)
+        return price
 
-    def get_product_image(self, url):
-        soup = BeautifulSoup(self.get_html(url), 'html.parser')
-        image_tag = self.__find_element(soup, PRODUCT_IMAGE_LOCATORS)
-        if image_tag:
-            return image_tag['src']
-        return None
-
-    def get_product_name(self, url):
-        soup = BeautifulSoup(self.get_html(url), 'html.parser')
-        name_tag = self.__find_element(soup, PRODUCT_NAME_LOCATORS)
-        if name_tag:
-            return str(name_tag.text).strip().split('+')[0]
-        return None
+    @property
+    def image_url(self):
+        image_url = None
+        if self._image_tag:
+            image_url = self._image_tag['src']
+        return image_url
