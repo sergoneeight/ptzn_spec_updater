@@ -1,23 +1,8 @@
-class By(object):
-    def __init__(self, tag_name=None, class_=None, id=None, container=None):
-        self.tag_name = tag_name
-        self.container = container
-        self.__class = class_
-        self.__id = id
-
-    @property
-    def attrs(self):
-        if self.__class:
-            return {'class_': self.__class}
-        elif self.__id:
-            return {'id': self.__id}
-        else:
-            return {}
-
+from scrapper.by import By
 
 PRODUCT_NAME_LOCATORS = [
     # https://bt.rozetka.com.ua
-    By(tag_name='h1', class_='detail-title', container=By(tag_name='div', class_='detail-title-wrap')),
+    By(tag_name='h1', container=By(tag_name='div', class_='detail-title-code')),
     # https://ikea-club.com.ua
     By(tag_name='h1', container=By(tag_name='div', class_='product-name')),
     # https://e27.com.ua
@@ -28,7 +13,7 @@ PRODUCT_NAME_LOCATORS = [
 
 PRODUCT_IMAGE_LOCATORS = [
     # https://bt.rozetka.com.ua
-    By(tag_name='img', id='base_image', container=By(tag_name='div', class_='responsive-img')),
+    By(tag_name='img', container=By(tag_name='pp-main-photo')),
     # https://ikea-club.com.ua
     By(tag_name='img', id='cloudZoomImage', container=By(tag_name='div', id='sevenspikes-cloud-zoom')),
     # https://e27.com.ua
@@ -39,7 +24,7 @@ PRODUCT_IMAGE_LOCATORS = [
 
 PRODUCT_PRICE_LOCATORS = [
     # https://bt.rozetka.com.ua
-    By(tag_name='meta', container=By(tag_name='div', class_='detail-price-uah')),
+    By(tag_name='span', container=By(tag_name='div', class_='detail-buy-label')),
     # https://ikea-club.com.ua
     By(tag_name='span', container=By(tag_name='div', class_='product-price')),
     # https://e27.com.ua
