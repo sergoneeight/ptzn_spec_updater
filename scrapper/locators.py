@@ -8,7 +8,9 @@ PRODUCT_NAME_LOCATORS = [
     # https://e27.com.ua
     By(tag_name='h1', container=By(tag_name='div', class_='product-name')),
     # https://jysk.ua
-    By(tag_name='h1', container=By(tag_name='div', class_='product-name-sku'))
+    By(tag_name='h1', container=By(tag_name='div', class_='product-name-sku')),
+    # his.ua
+    By(tag_name='span', container=By(tag_name='div', class_='product_layout_info'))
 ]
 
 PRODUCT_IMAGE_LOCATORS = [
@@ -19,7 +21,9 @@ PRODUCT_IMAGE_LOCATORS = [
     # https://e27.com.ua
     By(tag_name='img', id='image-main', container=By(tag_name='div', class_='img-box')),
     # https://jysk.ua
-    By(tag_name='img', class_='image', container=By(tag_name='div', id='product-image-carousel'))
+    By(tag_name='img', class_='image', container=By(tag_name='div', id='product-image-carousel')),
+    # his.ua
+    By(tag_name='img', container=By(tag_name='div', class_='product_left'))
 ]
 
 PRODUCT_PRICE_LOCATORS = [
@@ -30,5 +34,7 @@ PRODUCT_PRICE_LOCATORS = [
     # https://e27.com.ua
     By(tag_name='span', class_='price', container=By(tag_name='div', class_='product-type-data')),
     # https://jysk.ua
-    By(tag_name='span', class_='product-price', container=By(tag_name='div', class_='product-sumup'))
+    By(tag_name='span', class_='product-price', container=By(tag_name='div', class_='product-sumup')),
+    # his.ua
+    By(tag_name='span', id='product_price')
 ]
