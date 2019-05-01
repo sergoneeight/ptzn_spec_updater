@@ -1,8 +1,10 @@
+from urllib.parse import urlparse
+
 import requests
 import urllib3
 from bs4 import BeautifulSoup
 
-from scrapper.locators import PRODUCT_NAME_LOCATORS, PRODUCT_IMAGE_LOCATORS, PRODUCT_PRICE_LOCATORS
+from scrapper.locators import locators
 from utils import logger
 
 logger = logger.get_logger('scrapper.log')
@@ -12,7 +14,7 @@ class ProductDetailsScrapper(object):
 
     @staticmethod
     def get_html(url):
-        logger.info('Getting data for {}\n'.format(url))
+        logger.info('Getting data for {}'.format(url))
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         return requests.get(url, verify=False).text
 
@@ -40,9 +42,17 @@ class ProductDetailsScrapper(object):
 
     def get_product_details(self, url):
         soup = BeautifulSoup(self.get_html(url), 'html.parser')
-        name_tag = self._find_element(soup, PRODUCT_NAME_LOCATORS)
-        price_tag = self._find_element(soup, PRODUCT_PRICE_LOCATORS)
-        image_tag = self._find_element(soup, PRODUCT_IMAGE_LOCATORS)
+        locator_key = urlparse(url).netloc
+        name_tag, price_tag, image_tag = None, None, None
+
+        try:
+            current = locators[locator_key]
+            name_tag = self._find_element(soup, current['product_name'])
+            price_tag = self._find_element(soup, current['product_price'])
+            image_tag = self._find_element(soup, current['product_image'])
+        except KeyError as e:
+            logger.error('There is no available locators for {} key'.format(e))
+
         return Product(name_tag, price_tag, image_tag)
 
 
@@ -54,19 +64,19 @@ class Product(object):
 
     @property
     def name(self):
-        name = None
+        name = ''
         if self._name_tag:
             name = self._name_tag.text.strip().split('+')[0]
         return name
 
     @property
     def price(self):
-        price = None
+        price = ''
         if self._price_tag:
             try:
                 price = self._price_tag['content']
             except KeyError as e:
-                print('There is no {} key in price tag'.format(e))
+                logger.error('There is no {} key in price tag'.format(e))
                 price = self._price_tag.text
 
         if price:
@@ -76,7 +86,11 @@ class Product(object):
 
     @property
     def image_url(self):
-        image_url = None
+        image_url = ''
         if self._image_tag:
-            image_url = self._image_tag['src']
+            try:
+                image_url = self._image_tag['src']
+            except KeyError as e:
+                logger.error('There is no {} key in price tag'.format(e))
+
         return image_url

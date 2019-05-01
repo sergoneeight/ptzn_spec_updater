@@ -7,8 +7,7 @@ from scrapper.product_scrapper import ProductDetailsScrapper
 
 
 class SpreadSheetController(object):
-    SCOPE = ['https://spreadsheets.google.com/feeds',
-             'https://www.googleapis.com/auth/drive']
+    SCOPE = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
     URL_COLUMN_INDEX = 4
     CLIENT_SECRET_PATH = 'misc/ptzn_client_secret.json'
     COLUMN_PRODUCT_NAME_INDEX = 3
