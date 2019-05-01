@@ -1,7 +1,7 @@
 from scrapper.by import By
 
 locators = {
-    'bt.rozetka.com.ua': {
+    'rozetka.com.ua': {
         'product_name': (
             By(tag_name='h1', container=By(tag_name='div', class_='detail-title-code')),
         ),
@@ -47,13 +47,13 @@ locators = {
     },
     'his.ua': {
         'product_name': (
-            By(tag_name='span', container=By(tag_name='div', class_='product_layout_info'))
+            By(tag_name='span', container=By(tag_name='div', class_='product_layout_info')),
         ),
         'product_price': (
-            By(tag_name='span', id='product_price')
+            By(tag_name='span', id='product_price'),
         ),
         'product_image': (
-            By(tag_name='img', container=By(tag_name='div', class_='product_left'))
+            By(tag_name='img', container=By(tag_name='div', class_='product_left')),
         )
     }
 }

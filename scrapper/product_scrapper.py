@@ -43,6 +43,8 @@ class ProductDetailsScrapper(object):
     def get_product_details(self, url):
         soup = BeautifulSoup(self.get_html(url), 'html.parser')
         locator_key = urlparse(url).netloc
+        if locator_key.startswith('bt.'):
+            locator_key = locator_key.replace('bt.', '')
         name_tag, price_tag, image_tag = None, None, None
 
         try:
@@ -53,11 +55,12 @@ class ProductDetailsScrapper(object):
         except KeyError as e:
             logger.error('There is no available locators for {} key'.format(e))
 
-        return Product(name_tag, price_tag, image_tag)
+        return Product(url, name_tag, price_tag, image_tag)
 
 
 class Product(object):
-    def __init__(self, name_tag, price_tag, image_tag):
+    def __init__(self, url, name_tag, price_tag, image_tag):
+        self._url = url
         self._name_tag = name_tag
         self._price_tag = price_tag
         self._image_tag = image_tag
@@ -90,7 +93,11 @@ class Product(object):
         if self._image_tag:
             try:
                 image_url = self._image_tag['src']
+                if not image_url.startswith('http'):
+                    parsed = urlparse(self._url)
+                    image_url = '{}://{}{}'.format(parsed.scheme, parsed.netloc, image_url)
+                logger.info('Retrieved image url - {}'.format(image_url))
             except KeyError as e:
-                logger.error('There is no {} key in price tag'.format(e))
+                logger.error('There is no {} key in image tag'.format(e))
 
         return image_url
