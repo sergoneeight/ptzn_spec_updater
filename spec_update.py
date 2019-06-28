@@ -1,7 +1,7 @@
 from sheet.spreadsheet_controller import SpreadSheetController
 
-sheet_controller = SpreadSheetController(worksheet_index=0, sheet_name='ptzn_spec_test raq')
+sheet_controller = SpreadSheetController(worksheet_index=0, sheet_name='ptzn_spec_test')
 
 if __name__ == '__main__':
-    sheet_controller.update_spreadsheet()
-    # sheet_controller.clear_spreadsheet()
+    sheet_controller.update()
+    # sheet_controller.clear()

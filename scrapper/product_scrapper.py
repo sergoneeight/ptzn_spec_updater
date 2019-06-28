@@ -31,7 +31,8 @@ class ProductDetailsScrapper(object):
                     if not element:
                         logger.warning('ELEMENT - {} {} NOT FOUND'.format(locator.tag_name, locator.attrs))
                     return element
-                logger.warning('CONTAINER - {} {} NOT FOUND'.format(locator.container.tag_name, locator.container.attrs))
+                logger.warning(
+                    'CONTAINER - {} {} NOT FOUND'.format(locator.container.tag_name, locator.container.attrs))
             else:
                 element = soup.find(name=locator.tag_name, **locator.attrs)
                 if not element:
