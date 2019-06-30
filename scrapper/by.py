@@ -1,16 +1,12 @@
 class By(object):
-    def __init__(self, tag_name=None, class_=None, id=None, container=None):
+    def __init__(self, tag_name=None, container=None, **kwargs):
         self.tag_name = tag_name
         self.container = container
-        self.__class = class_
-        self.__id = id
+        self._attrs = kwargs
 
     @property
     def attrs(self):
-        locable = {}
-        if self.__class:
-            locable.update({'class': self.__class})
-        elif self.__id:
-            locable.update({'id': self.__id})
-
-        return locable
+        if 'class_' in self._attrs.keys():
+            self._attrs.update({'class': self._attrs.get('class_')})
+            self._attrs.pop('class_')
+        return self._attrs

@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 
 from scrapper.locators import locators
 from utils import logger
+from utils.scrapper_utils import get_price
 
 logger = logger.get_logger('scrapper.log')
 
@@ -16,7 +17,12 @@ class ProductDetailsScrapper(object):
     def get_html(url):
         logger.info('Getting data for {}'.format(url))
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-        return requests.get(url, verify=False).text
+        headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) '
+                                 'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+        response = requests.get(url, headers=headers, verify=False)
+        response.encoding = 'utf-8'
+
+        return response.text
 
     @staticmethod
     def _find_element(soup, locators):
@@ -75,18 +81,15 @@ class Product(object):
 
     @property
     def price(self):
-        price = ''
+        price_str = ''
         if self._price_tag:
             try:
-                price = self._price_tag['content']
+                price_str = self._price_tag['content']
             except KeyError as e:
                 logger.error('There is no {} key in price tag'.format(e))
-                price = self._price_tag.text
+                price_str = self._price_tag.text
 
-        if price:
-            price = ''.join(i for i in price if i.isdigit() or i == ',' or i == '.')
-            price = float(price)
-        return price
+        return get_price(price_str)
 
     @property
     def image_url(self):

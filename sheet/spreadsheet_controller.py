@@ -44,9 +44,6 @@ class SpreadSheetController(object):
         products_url_cells = self._get_all_working_cells()
         for cell in products_url_cells:
             product = self.scrapper.get_product_details(cell.value)
-            if product.name:
-                self._update_product_name(cell, product.name)
-            if product.price:
-                self._update_product_price(cell, product.price)
-            if product.image_url:
-                self._update_product_image(cell, product.image_url)
+            self._update_product_name(cell, product.name)
+            self._update_product_price(cell, product.price)
+            self._update_product_image(cell, product.image_url)
