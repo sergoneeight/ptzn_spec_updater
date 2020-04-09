@@ -122,5 +122,104 @@ locators = {
         'product_image': (
             By(tag_name='img', container=By(tag_name='div', class_='prod-slider')),
         )
+    },
+    'luxaqua.com.ua': {
+        'product_name': (
+            By(tag_name='h1', container=By(tag_name='div', id='content')),
+        ),
+        'product_price': (
+            By(tag_name='div', class_='price'),
+        ),
+        'product_image': (
+            By(tag_name='img', id='image'),
+        )
+    },
+    'www.santechshara.com.ua': {
+        'product_name': (
+            By(tag_name='h1', container=By(tag_name='div', class_='h2')),
+        ),
+        'product_price': (
+            By(tag_name='span', container=By(tag_name='div', class_='price')),
+        ),
+        'product_image': (
+            By(tag_name='img', class_='zoomed'),
+        )
+    },
+    'liberta.ua': {
+        'product_name': (
+            By(tag_name='h1', class_='main-product-header'),
+        ),
+        'product_price': (
+            By(tag_name='span', id='myodometer'),
+        ),
+        'product_image': (
+            By(tag_name='img', class_='product-bg'),
+        )
+    },
+    'franke-market.com.ua': {
+        'product_name': (
+            By(tag_name='h1', container=By(tag_name='div', class_='page-title')),
+        ),
+        'product_price': (
+            By(tag_name='span', class_='price-text'),
+        ),
+        'product_image': (
+            By(tag_name='img', container=By(tag_name='div', id='slider')),
+        )
+    },
+    'interia.com.ua': {
+        'product_name': (
+            By(tag_name='h1', container=By(tag_name='div', class_='title-wrapper')),
+        ),
+        'product_price': (
+            By(tag_name='span', container=By(tag_name='div', class_='product-price')),
+        ),
+        'product_image': (
+            By(tag_name='img', container=By(tag_name='div', class_='product-main-image-wrapper')),
+        )
+    },
+    'miroshop.com.ua': {
+        'product_name': (
+            By(tag_name='h1', container=By(tag_name='div', class_='pp-title')),
+        ),
+        'product_price': (
+            By(tag_name='span', container=By(tag_name='div', class_='product-price')),
+        ),
+        'product_image': (
+            By(tag_name='img', container=By(tag_name='div', class_='pd-images')),
+        )
+    },
+    'www.lampa.kiev.ua': {
+        'product_name': (
+            By(tag_name='h1', class_='new-page__single-item__name'),
+        ),
+        'product_price': (
+            By(tag_name='div', class_='new-page__single-item__item-price'),
+        ),
+        'product_image': (
+            By(tag_name='img', container=By(tag_name='div', class_='new-page__single-item__main-image')),
+        )
+    },
+    'cersanit.com.ua': {
+        'product_name': (
+            By(tag_name='h1', container=By(tag_name='div', class_='productView')),
+        ),
+        'product_price': (
+            By(tag_name='div', class_='new-page__single-item__item-price'),
+        ),
+        'product_image': (
+            By(tag_name='img', container=By(tag_name='div', class_='.gallery')),
+        )
+    },
+    'aqua-radiator.com': {
+        'product_name': (
+            By(tag_name='h1', container=By(tag_name='div', class_='productView')),
+        ),
+        'product_price': (
+            By(tag_name='div', class_='new-page__single-item__item-price'),
+        ),
+        'product_image': (
+            By(tag_name='img', container=By(tag_name='div', class_='.gallery')),
+        )
     }
 }

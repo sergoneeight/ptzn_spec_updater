@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 
 from scrapper.locators import locators
 from utils import logger
-from utils.scrapper_utils import get_price
+from utils.scrapper_utils import price_str_to_float
 
 logger = logger.get_logger('scrapper.log')
 
@@ -89,7 +89,7 @@ class Product(object):
                 logger.error('There is no {} key in price tag'.format(e))
                 price_str = self._price_tag.text
 
-        return get_price(price_str)
+        return price_str_to_float(price_str)
 
     @property
     def image_url(self):

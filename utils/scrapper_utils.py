@@ -1,14 +1,10 @@
-def get_price(price_str):
-    result = []
-    if price_str:
-        price_str = price_str.replace(',', '.')
-        for c in price_str:
-            if c.isalpha():
-                break
-            if c.isdigit() or c == '.':
-                result.append(c)
+def price_str_to_float(price_str):
+    price_str = price_str.replace(',', '.')
+    formatted_price = ''.join(i for i in price_str if i.isdigit() or i == '.')
+    if formatted_price.endswith('.'):
+        formatted_price = formatted_price[:-1]
     try:
-        price = float(''.join(result))
+        price = float(''.join(formatted_price))
     except ValueError:
         price = 0
     return price
