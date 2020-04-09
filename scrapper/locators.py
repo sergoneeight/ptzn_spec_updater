@@ -3,13 +3,13 @@ from scrapper.by import By
 locators = {
     'rozetka.com.ua': {
         'product_name': (
-            By(tag_name='h1', container=By(tag_name='div', class_='detail-title-code')),
+            By(tag_name='h1', container=By(tag_name='div', class_='product__heading')),
         ),
         'product_price': (
-            By(tag_name='span', container=By(tag_name='div', class_='detail-buy-label')),
+            By(tag_name='p', container=By(tag_name='div', class_='product-prices__inner')),
         ),
         'product_image': (
-            By(tag_name='img', container=By(tag_name='pp-main-photo')),
+            By(tag_name='img', class_='product-photo__picture'),
         )
     },
     'ikea-club.com.ua': {
