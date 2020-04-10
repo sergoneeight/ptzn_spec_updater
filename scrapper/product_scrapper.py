@@ -1,7 +1,6 @@
 from urllib.parse import urlparse
 
-import requests
-import urllib3
+import cloudscraper
 from bs4 import BeautifulSoup
 
 from scrapper.locators import locators
@@ -13,16 +12,37 @@ logger = logger.get_logger('scrapper.log')
 
 class ProductDetailsScrapper(object):
 
+    # @staticmethod
+    # def get_html(url):
+    #     logger.info('Getting data for {}'.format(url))
+    #     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    #     # headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) '
+    #     #                          'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+    #     header = {
+    #         'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+    #         # 'accept-encoding': 'gzip, deflate, br', # удалите эту строку
+    #         'accept-language': 'en-US,en;q=0.8',
+    #         'upgrade-insecure-requests': '1',
+    #         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+    #     }
+    #     # headers = {
+    #     #     'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0',
+    #     #
+    #     # }
+    #     response = requests.get(url, headers=header, timeout=5, verify=False)
+    #     if response.status_code == 503:
+    #         response = requests.get(url, headers=header, timeout=5, verify=False)
+    #     response.encoding = 'utf-8'
+    #
+    #     return response.text
+
     @staticmethod
     def get_html(url):
         logger.info('Getting data for {}'.format(url))
-        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-        headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) '
-                                 'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-        response = requests.get(url, headers=headers, verify=False)
-        response.encoding = 'utf-8'
-
-        return response.text
+        scraper = cloudscraper.create_scraper()
+        result = scraper.get(url)
+        result.encoding = 'utf-8'
+        return result.text
 
     @staticmethod
     def _find_element(soup, locators):
@@ -95,13 +115,12 @@ class Product(object):
     def image_url(self):
         image_url = ''
         if self._image_tag:
-            try:
-                image_url = self._image_tag['src']
+            image_url = self._image_tag.get('src') or self._image_tag.get('data-src')
+            if image_url:
                 if not image_url.startswith('http'):
                     parsed = urlparse(self._url)
                     image_url = '{}://{}{}'.format(parsed.scheme, parsed.netloc, image_url)
                 logger.info('Retrieved image url - {}'.format(image_url))
-            except KeyError as e:
-                logger.error('There is no {} key in image tag'.format(e))
-
+            else:
+                logger.error('Failed to locate image')
         return image_url

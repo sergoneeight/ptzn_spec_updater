@@ -197,10 +197,10 @@ locators = {
             By(tag_name='div', class_='new-page__single-item__item-price'),
         ),
         'product_image': (
-            By(tag_name='img', container=By(tag_name='div', class_='new-page__single-item__main-image')),
+            By(tag_name='img', container=By(tag_name='div', class_='badges_new')),
         )
     },
-    'cersanit.com.ua': {
+    'www.cersanit.com.ua': {
         'product_name': (
             By(tag_name='h1', container=By(tag_name='div', class_='productView')),
         ),
@@ -208,7 +208,7 @@ locators = {
             By(tag_name='div', class_='new-page__single-item__item-price'),
         ),
         'product_image': (
-            By(tag_name='img', container=By(tag_name='div', class_='.gallery')),
+            By(tag_name='img', container=By(tag_name='div', class_='gallery')),
         )
     },
     'aqua-radiator.com': {
@@ -219,7 +219,18 @@ locators = {
             By(tag_name='div', class_='new-page__single-item__item-price'),
         ),
         'product_image': (
-            By(tag_name='img', container=By(tag_name='div', class_='.gallery')),
+            By(tag_name='img', class_='wp-post-image'),
+        )
+    },
+    'www.thefild.com': {
+        'product_name': (
+            By(tag_name='h1', class_='gallery-title'),
+        ),
+        'product_price': (
+            By(tag_name='div', class_='new-page__single-item__item-price'),
+        ),
+        'product_image': (
+            By(tag_name='img', container=By(tag_name='div', id='flowItems')),
         )
     }
 }
